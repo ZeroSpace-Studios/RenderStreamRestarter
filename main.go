@@ -231,7 +231,7 @@ func main() {
 			return
 		}
 
-		if status == "RUNNING" || status == "LAUNCHING" || status == "READY" {
+		if status == "RUNNING" || status == "LAUNCHING" || status == "READY" || status == "STARTING" {
 			log.Printf("Layer is %s, waiting 5 seconds\n", status)
 			time.Sleep(time.Duration(*timeout) * time.Second)
 			continue
