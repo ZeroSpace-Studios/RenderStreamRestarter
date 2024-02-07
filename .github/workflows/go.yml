@@ -22,3 +22,59 @@ jobs:
         
     - name: Build
       run: go build -v ./...
+
+    - name: Save Folder
+      uses: actions/upload-artifact@v3
+      with:
+        name: upload
+        path: renderstreamstarter.exe
+      
+  upload-release:
+
+    runs-on: ubuntu-20.04
+    needs: [build]
+    permissions: write-all
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          ${{github.ref_name}}
+          ${{ github.event.head_commit.message }}
+        draft: false
+        prerelease: false
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v1
+      with:
+        name: upload
+    - name: Zip File
+      run: zip -r "./RenderStreamRestarter-${{github.ref_name}}.zip" "./renderstreamrestarter.exe"
+    - name: Upload Windows Version
+      id: upload-windows
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: "./RenderStreamRestarter-${{github.ref_name}}.zip"
+        asset_name: "RenderStreamRestarter-${{github.ref_name}}.zip"
+        asset_content_type: application/zip
+    - name: Make Upload Directory
+      run: >
+        mkdir -p "${{github.ref_name}}" &&
+        cp -r "./RenderStreamRestarter-${{github.ref_name}}.zip" "${{github.ref_name}}/"
+    - name: Upload To Drive
+      uses: adityak74/google-drive-upload-git-action@v0.3
+      with:
+          credentials: ${{ secrets.DRIVE_CREDENTIALS }}
+          filename: "${{github.ref_name}}/RenderStreamRestarter-${{github.ref_name}}.zip"
+          folderId: ${{ secrets.FOLDER_ID }}
+          overwrite: "false"
+          mirrorDirectoryStructure: "true"
