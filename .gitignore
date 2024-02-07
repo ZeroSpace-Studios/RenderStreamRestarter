@@ -1,0 +1,45 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.prof
+*.pprof
+*.trace
+*.test
+*.test.out
+*.test.prof
+*.test.pprof
+*.test.trace
+/vendor/
+/Godeps/
+/.glide/
+/.idea/
+/.vscode/
+/.vs/
+/.test/
+/.cache/
+/.history/
+/.tmp/
+/.tmp_test/
+/.swp
+/.swo
+/.DS_Store
+/.env
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.zip
