@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
@@ -205,6 +206,11 @@ func main() {
 	timeout := flag.Int("timeout", 5, "The timeout in seconds")
 	flag.Parse()
 
+	if server == nil || layer == nil || timeout == nil {
+		log.Println("Invalid arguments")
+		return
+	}
+
 	reader := RenderStreamReader{
 		server: *server,
 	}
@@ -212,7 +218,7 @@ func main() {
 	layerUID, err := reader.GetRenderStreamLayerByName(*layer)
 
 	if err != nil {
-		fmt.Printf("Error Getting Layers: %s", err)
+		log.Printf("Error Getting Layers: %s", err)
 		return
 	}
 
@@ -221,12 +227,12 @@ func main() {
 		status, err := reader.GetLayerStatus(layerUID)
 
 		if err != nil {
-			fmt.Printf("Error Getting Status: %s", err)
+			log.Printf("Error Getting Status: %s\n", err)
 			return
 		}
 
 		if status == "RUNNING" || status == "LAUNCHING" || status == "READY" {
-			fmt.Printf("Layer is %s, waiting 5 seconds\n", status)
+			log.Printf("Layer is %s, waiting 5 seconds\n", status)
 			time.Sleep(time.Duration(*timeout) * time.Second)
 			continue
 		}
@@ -238,7 +244,7 @@ func main() {
 			return
 		}
 
-		fmt.Println("Layer restarted")
+		log.Println("Layer restarted")
 		time.Sleep(time.Duration(*timeout) * time.Second)
 	}
 
