@@ -202,6 +202,7 @@ func (r *RenderStreamReader) RestartRenderStreamLayer(layerUID string, name stri
 func main() {
 	server := flag.String("server", "localhost", "The server to connect to")
 	layer := flag.String("layer", "Rs", "The layer to restart")
+	timeout := flag.Int("timeout", 5, "The timeout in seconds")
 	flag.Parse()
 
 	reader := RenderStreamReader{
@@ -226,7 +227,7 @@ func main() {
 
 		if status == "RUNNING" || status == "LAUNCHING" || status == "READY" {
 			fmt.Printf("Layer is %s, waiting 5 seconds\n", status)
-			time.Sleep(5 * time.Second)
+			time.Sleep(time.Duration(*timeout) * time.Second)
 			continue
 		}
 
@@ -238,7 +239,7 @@ func main() {
 		}
 
 		fmt.Println("Layer restarted")
-		time.Sleep(5 * time.Second)
+		time.Sleep(time.Duration(*timeout) * time.Second)
 	}
 
 }
