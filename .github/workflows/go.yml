@@ -54,8 +54,10 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: upload
+    - name: Rename File
+      run: ls -l ./ && ls ./upload && mv ./upload renderstreamrestarter.exe 
     - name: Zip File
-      run: zip -r "./RenderStreamRestarter-${{github.ref_name}}.zip" "./upload/renderstreamrestarter.exe"
+      run: zip -r "./RenderStreamRestarter-${{github.ref_name}}.zip" "./renderstreamrestarter.exe"
     - name: Upload Windows Version
       id: upload-windows
       uses: actions/upload-release-asset@v1.0.1
