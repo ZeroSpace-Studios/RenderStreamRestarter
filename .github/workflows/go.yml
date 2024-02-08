@@ -55,7 +55,7 @@ jobs:
       with:
         name: upload
     - name: Rename File
-      run: ls -l ./ && ls ./upload && mv ./upload renderstreamrestarter.exe 
+      run: mv ./upload/renderstreamstarter.exe ./renderstreamrestarter.exe 
     - name: Zip File
       run: zip -r "./RenderStreamRestarter-${{github.ref_name}}.zip" "./renderstreamrestarter.exe"
     - name: Upload Windows Version
