@@ -55,7 +55,7 @@ jobs:
       with:
         name: upload
     - name: Zip File
-      run: zip -r "./RenderStreamRestarter-${{github.ref_name}}.zip" "./renderstreamrestarter.exe"
+      run: zip -r "./RenderStreamRestarter-${{github.ref_name}}.zip" "./upload/renderstreamrestarter.exe"
     - name: Upload Windows Version
       id: upload-windows
       uses: actions/upload-release-asset@v1.0.1
